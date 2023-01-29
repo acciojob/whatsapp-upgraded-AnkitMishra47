@@ -123,7 +123,9 @@ public class WhatsappRepository {
 
 
     public int removeUser(User user) throws Exception {
-        if (user.getGroup() == null){
+        Group group = user.getGroup();
+
+        if (group == null){
             throw new Exception("User not found");
         }
 
@@ -131,7 +133,8 @@ public class WhatsappRepository {
             throw new Exception("Cannot remove admin");
         }
 
-        List<Message> totalGroupMessages    = user.getGroup().getMessages();
+
+        List<Message> totalGroupMessages    = group.getMessages();
         List<Message> userMessages          = getUserMessages(user, totalGroupMessages);
 
         for (Message message : allMessages){
@@ -141,10 +144,10 @@ public class WhatsappRepository {
         }
 
         whatsappUsers.remove(user.getMobile());
-        user.getGroup().removeUser(user);
+        group.removeUser(user);
         user.setGroup(null);
 
-        return user.getGroup().getUsers().size() + (totalGroupMessages.size() - userMessages.size()) + allMessages.size();
+        return group.getUsers().size() + (totalGroupMessages.size() - userMessages.size()) + allMessages.size();
     }
 
     private List<Message> getUserMessages(User user, List<Message> messages) {
