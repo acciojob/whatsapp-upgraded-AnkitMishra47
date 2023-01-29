@@ -7,6 +7,16 @@ public class Message {
     private String content;
     private Date timestamp;
 
+    public boolean isSent() {
+        return isSent;
+    }
+
+    public void setSent(boolean sent) {
+        isSent = sent;
+    }
+
+    boolean isSent = false;
+
     User user;
 
     public User getUser() {

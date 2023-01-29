@@ -76,6 +76,7 @@ public class WhatsappRepository {
 
         List<Message> messages = group.getMessages();
         message.setUser(sender);
+        message.setSent(true);
         message.setTimestamp(new Date());
         messages.add(message);
         group.setMessages(messages);
@@ -135,7 +136,7 @@ public class WhatsappRepository {
 
         // delete messages from overall Messages
         for (Message message : allMessages){
-                if (message.getUser() == user){
+                if ( message.getUser() == user){
                     allMessages.remove(message);
                 }
         }
@@ -145,7 +146,11 @@ public class WhatsappRepository {
         group.removeUser(user);
         user.setGroup(null);
 
-        return group.getUsers().size() + group.getMessages().size() + allMessages.size();
+        return group.getUsers().size() + group.getMessages().size() + getSentMessages(allMessages);
+    }
+
+    private int getSentMessages(List<Message> allMessages) {
+        return allMessages.stream().filter(message -> message.isSent() == true).collect(Collectors.toList()).size();
     }
 
     private boolean isAdmin(Group group, User approver) {
