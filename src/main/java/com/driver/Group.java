@@ -2,6 +2,7 @@ package com.driver;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Group {
     private String name;
@@ -53,13 +54,7 @@ public class Group {
 
     public void removeUser(User user){
         this.users.remove(user);
-        List<Message> messages = getMessages();
-
-        //first delete all the messages
-        for (Message message : messages){
-            if (message.getUser() == user){
-                this.messages.remove(message);
-            }
-        }
+        List<Message> messages = getMessages().stream().filter(message -> message.getUser() != user).collect(Collectors.toList());
+        setMessages(messages);
     }
 }
