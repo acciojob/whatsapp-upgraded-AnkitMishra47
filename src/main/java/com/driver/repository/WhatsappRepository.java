@@ -84,11 +84,6 @@ public class WhatsappRepository {
         return messages.size();
     }
 
-    private boolean isMemberOfTheGroup(User sender, Group group) {
-        User user = group.getUsers().stream().filter(val -> val == sender).findFirst().orElse(null);
-        return  user != null;
-    }
-
     public String changeAdmin(User approver, User user, Group group) throws Exception {
         if (!isGroupFound(group)){
             throw new Exception("Group does not exist");
@@ -121,8 +116,6 @@ public class WhatsappRepository {
         return SUCCESS;
     }
 
-
-
     public int removeUser(User user) throws Exception {
         Group group = user.getGroup();
 
@@ -134,19 +127,19 @@ public class WhatsappRepository {
             throw new Exception("Cannot remove admin");
         }
 
+        List<Message> updatedMessages = new ArrayList<>();
         // delete messages from overall Messages
         for (Message message : allMessages){
-                if ( message.getUser() == user){
-                    allMessages.remove(message);
+                if ( message.getUser() != user){
+                    updatedMessages.add(message);
                 }
         }
 
         // removing from users
         whatsappUsers.remove(user.getMobile());
         group.removeUser(user);
-        user.setGroup(null);
 
-        return group.getUsers().size() + group.getMessages().size() + getSentMessages(allMessages);
+        return group.getUsers().size() + group.getMessages().size() + updatedMessages.size();
     }
 
     private int getSentMessages(List<Message> allMessages) {
@@ -160,5 +153,10 @@ public class WhatsappRepository {
     private boolean isGroupFound(Group group){
         Group newGroup = allGroups.keySet().stream().filter(val -> val == group).findFirst().orElse(null);
         return newGroup != null;
+    }
+
+    private boolean isMemberOfTheGroup(User sender, Group group) {
+        User user = group.getUsers().stream().filter(val -> val == sender).findFirst().orElse(null);
+        return  user != null;
     }
 }

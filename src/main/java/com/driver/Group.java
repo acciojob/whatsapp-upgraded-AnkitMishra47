@@ -53,9 +53,13 @@ public class Group {
     }
 
     public void removeUser(User user){
-        List<Message> messages = getMessages().stream().filter(message -> message.getUser() != user).collect(Collectors.toList());
+        List<Message>   messages    = getMessages().stream().filter(message -> message.getUser() != user)
+                                                            .collect(Collectors.toList());
+        List<User>      users       = getUsers();
+
+        users.remove(user);
         setMessages(messages);
-        List<User> users = getUsers().stream().filter(newUser -> newUser != user).collect(Collectors.toList());
         setUsers(users);
+        user.setGroup(null);
     }
 }
