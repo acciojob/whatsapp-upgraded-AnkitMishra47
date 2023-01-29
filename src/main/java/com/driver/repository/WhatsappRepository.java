@@ -14,7 +14,7 @@ public class WhatsappRepository {
     HashMap<String, User>           whatsappUsers = new HashMap<>();
     HashMap<Group , List <User>>    allActualGroups     = new HashMap<>();
     HashMap<Group , List <User>>    allGroups     = new HashMap<>();
-    TreeMap<Date , Message>         allMessages   = new TreeMap<>();
+    List<Message>        allMessages   = new ArrayList<>();
 
     // constants
     private final String SUCCESS = "SUCCESS";
@@ -59,7 +59,7 @@ public class WhatsappRepository {
     public int createMessage(String content) {
         int     id      = allMessages.size() + 1; 
         Message message = new Message(id , content );
-        allMessages.put(new Date(), message);
+        allMessages.add(message);
         
         return id;
     }
@@ -120,14 +120,7 @@ public class WhatsappRepository {
         return SUCCESS;
     }
 
-    private boolean isAdmin(Group group, User approver) {
-        return group.getUsers().get(0) == approver;
-    }
 
-    private boolean isGroupFound(Group group){
-        Group newGroup = allGroups.keySet().stream().filter(val -> val == group).findFirst().orElse(null);
-        return newGroup != null;
-    }
 
     public int removeUser(User user) throws Exception {
         if (user.getGroup() == null){
@@ -139,11 +132,11 @@ public class WhatsappRepository {
         }
 
         List<Message> totalGroupMessages    = user.getGroup().getMessages();
-        List<Message> userMessages          = getUserMessages(user ,  totalGroupMessages);
+        List<Message> userMessages          = getUserMessages(user, totalGroupMessages);
 
-        for (Map.Entry<Date , Message> mapEntry : allMessages.entrySet()){
-                if (userMessages.contains(mapEntry.getValue())){
-                    allMessages.remove(mapEntry.getKey());
+        for (Message message : allMessages){
+                if (userMessages.contains(message)){
+                    allMessages.remove(message);
                 }
         }
 
@@ -156,5 +149,14 @@ public class WhatsappRepository {
 
     private List<Message> getUserMessages(User user, List<Message> messages) {
         return messages.stream().filter(val -> val.getUser() == user).collect(Collectors.toList());
+    }
+
+    private boolean isAdmin(Group group, User approver) {
+        return group.getUsers().get(0) == approver;
+    }
+
+    private boolean isGroupFound(Group group){
+        Group newGroup = allGroups.keySet().stream().filter(val -> val == group).findFirst().orElse(null);
+        return newGroup != null;
     }
 }
