@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 public class WhatsappRepository {
 
     HashMap<String, User>           whatsappUsers = new HashMap<>();
+    HashMap<Group , List <User>>    allActualGroups     = new HashMap<>();
     HashMap<Group , List <User>>    allGroups     = new HashMap<>();
     TreeMap<Date , Message>         allMessages   = new TreeMap<>();
 
@@ -36,7 +37,7 @@ public class WhatsappRepository {
             groupName = users.get(1).getName();
         }
         else{
-            groupName = "Group " + (allGroups.size() + 1);
+            groupName = "Group " + (allActualGroups.size() + 1);
         }
 
         Group group = new Group(groupName , groupUserCount);
@@ -47,9 +48,11 @@ public class WhatsappRepository {
         }
 
         if (groupUserCount > 2){
-            allGroups.put(group , users);
+            allActualGroups.put(group , users);
         }
 
+        allGroups.put(group, users);
+        
         return group;
     }
 
@@ -112,7 +115,7 @@ public class WhatsappRepository {
         }
 
         group.setUsers(users);
-        allGroups.put(group , users);
+        allActualGroups.put(group , users);
 
         return SUCCESS;
     }
