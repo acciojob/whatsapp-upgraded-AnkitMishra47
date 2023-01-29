@@ -52,14 +52,14 @@ public class Group {
     }
 
     public void removeUser(User user){
+        this.users.remove(user);
+        List<Message> messages = getMessages();
 
         //first delete all the messages
-        for (Message message : getMessages()){
+        for (Message message : messages){
             if (message.getUser() == user){
                 this.messages.remove(message);
             }
         }
-
-        this.users.remove(user);
     }
 }

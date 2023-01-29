@@ -144,6 +144,7 @@ public class WhatsappRepository {
                 }
         }
 
+        // removing from users
         whatsappUsers.remove(user.getMobile());
         group.removeUser(user);
         user.setGroup(null);
