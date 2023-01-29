@@ -1,8 +1,8 @@
 package com.driver.repository;
 
-import com.driver.model.Group;
-import com.driver.model.Message;
-import com.driver.model.User;
+import com.driver.Group;
+import com.driver.Message;
+import com.driver.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
