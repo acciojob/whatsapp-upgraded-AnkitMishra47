@@ -137,6 +137,7 @@ public class WhatsappRepository {
         List<Message> totalGroupMessages    = group.getMessages();
         List<Message> userMessages          = getUserMessages(user, totalGroupMessages);
 
+        // delete messages from overall Messages
         for (Message message : allMessages){
                 if (userMessages != null && userMessages.contains(message)){
                     allMessages.remove(message);
@@ -147,7 +148,7 @@ public class WhatsappRepository {
         group.removeUser(user);
         user.setGroup(null);
 
-        return group.getUsers().size() + (totalGroupMessages.size() - userMessages.size()) + allMessages.size();
+        return group.getUsers().size() + group.getMessages().size() + allMessages.size();
     }
 
     private List<Message> getUserMessages(User user, List<Message> messages) {
