@@ -27,11 +27,7 @@ public class WhatsappService {
     }
 
     public int sendMessage(Message message, User sender, Group group) throws Exception {
-        try {
-            return whatsappRepository.sendMessage(message , sender , group);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return whatsappRepository.sendMessage(message , sender , group);
     }
 
     public String changeAdmin(User approver, User user, Group group) throws Exception {
@@ -43,6 +39,6 @@ public class WhatsappService {
     }
 
     public String findMessage(Date start, Date end, int k) {
-        return null;
+        return "null";
     }
 }

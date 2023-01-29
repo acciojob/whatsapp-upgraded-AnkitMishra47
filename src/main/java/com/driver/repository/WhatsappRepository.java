@@ -16,7 +16,7 @@ public class WhatsappRepository {
     TreeMap<Date , Message>         allMessages   = new TreeMap<>();
 
     // constants
-    private String SUCCESS = "SUCCESS";
+    private final String SUCCESS = "SUCCESS";
 
     public String createUser(String name , String mobile) throws Exception {
         User user = new User(name , mobile);
@@ -24,14 +24,13 @@ public class WhatsappRepository {
         if (whatsappUsers.containsKey(mobile)){
             throw new Exception("User already exists");
         }
-
         whatsappUsers.put(mobile , user);
         return SUCCESS;
     }
 
     public Group createGroup(List<User> users){
         int groupUserCount  = users.size();
-        String groupName    = null;
+        String groupName;
 
         if (groupUserCount == 2){
             groupName = users.get(1).getName();
@@ -56,14 +55,13 @@ public class WhatsappRepository {
 
     public int createMessage(String content) {
         int     id      = allMessages.size() + 1; 
-        Message message = new Message(id , content , new Date());
+        Message message = new Message(id , content );
         allMessages.put(message.getTimestamp() , message);
         
         return id;
     }
 
     public int sendMessage(Message message, User sender, Group group) throws Exception {
-        boolean isAllowedToSendMessages = false;
 
         if (!isGroupFound(group)){
             throw new Exception("Group does not exist");
@@ -75,6 +73,7 @@ public class WhatsappRepository {
 
         List<Message> messages = group.getMessages();
         message.setUser(sender);
+        message.setTimestamp(new Date());
         messages.add(message);
         group.setMessages(messages);
 
