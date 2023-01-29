@@ -135,7 +135,7 @@ public class WhatsappRepository {
         List<Message> userMessages          = getUserMessages(user, totalGroupMessages);
 
         for (Message message : allMessages){
-                if (userMessages.contains(message)){
+                if (userMessages != null && userMessages.contains(message)){
                     allMessages.remove(message);
                 }
         }
