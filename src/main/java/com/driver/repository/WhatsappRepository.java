@@ -133,13 +133,9 @@ public class WhatsappRepository {
             throw new Exception("Cannot remove admin");
         }
 
-
-        List<Message> totalGroupMessages    = group.getMessages();
-        List<Message> userMessages          = getUserMessages(user, totalGroupMessages);
-
         // delete messages from overall Messages
         for (Message message : allMessages){
-                if (userMessages != null && userMessages.contains(message)){
+                if (message.getUser() == user){
                     allMessages.remove(message);
                 }
         }
@@ -150,10 +146,6 @@ public class WhatsappRepository {
         user.setGroup(null);
 
         return group.getUsers().size() + group.getMessages().size() + allMessages.size();
-    }
-
-    private List<Message> getUserMessages(User user, List<Message> messages) {
-        return messages.stream().filter(val -> val.getUser() == user).collect(Collectors.toList());
     }
 
     private boolean isAdmin(Group group, User approver) {
